@@ -48,12 +48,15 @@ def upload_file():
             /* Background video */
             .bg-video {
                 position: fixed;
-                right: 0;
-                bottom: 0;
+                top: 50%;
+                left: 50%;
                 min-width: 100%;
                 min-height: 100%;
+                width: auto;
+                height: auto;
                 z-index: -1;
-                object-fit: cover;
+                transform: translate(-50%, -50%);
+                object-fit: cover; /* always covers screen */
             }
 
             /* Content overlay */
@@ -62,10 +65,11 @@ def upload_file():
                 z-index: 1;
                 top: 50%;
                 transform: translateY(-50%);
-                background-color: rgba(0,0,0,0.5);
+                background-color: rgba(0, 0, 0, 0.4); /* slightly transparent */
                 padding: 30px;
                 border-radius: 10px;
                 display: inline-block;
+                backdrop-filter: blur(5px); /* blur video behind overlay */
             }
 
             form input[type=file] {
@@ -87,11 +91,22 @@ def upload_file():
                 border: 5px solid #fff;
                 border-radius: 10px;
             }
+
+            /* Mobile optimization */
+            @media (max-width: 480px) {
+                .bg-video {
+                    display: none;
+                }
+                body {
+                    background: url("{{ url_for('static', filename='background.jpg') }}") no-repeat center center;
+                    background-size: cover;
+                }
+            }
         </style>
     </head>
     <body>
-        <!-- Background video -->
-        <video autoplay muted loop class="bg-video">
+        <!-- Background video with fallback -->
+        <video autoplay muted loop playsinline class="bg-video" poster="{{ url_for('static', filename='background.jpg') }}">
             <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
             Your browser does not support HTML5 video.
         </video>
