@@ -37,9 +37,6 @@ def upload_file():
         </form>
     ''')
 
-@app.route('/uploads/<name>')
-def download_file(name):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], name)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Render sets PORT automatically
+    app.run(host="0.0.0.0", port=port, debug=True)
